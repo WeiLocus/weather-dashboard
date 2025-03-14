@@ -1,7 +1,12 @@
 import './App.css'
+import WeatherDashboard from './views/WeatherDashboard'
 
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>
+  return (
+    <div>
+      <WeatherDashboard />
+    </div>
+  )
 }
 
 export default App
