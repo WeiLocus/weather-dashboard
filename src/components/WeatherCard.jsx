@@ -23,7 +23,7 @@ function WeatherCard() {
             }`}
           />
         </button>
-        <p className="mb-1 text-xl font-bold md: mb-2 ">city name</p>
+        <p className="mb-1 text-xl font-bold">city name</p>
       </div>
 
       <div className="flex flex-col md:flex-row md:justify-between">
