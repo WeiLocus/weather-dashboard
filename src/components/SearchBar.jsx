@@ -1,13 +1,25 @@
-function SearchBar() {
+import { useState } from 'react'
+
+function SearchBar({ onSearch }) {
+  const [searchInput, setSearchInput] = useState('')
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (searchInput.trim() === '') return
+    console.log('search:', searchInput)
+    onSearch(searchInput)
+  }
   return (
     <div className="m-2 sm: mt-4">
-      <form className="mx-auto max-w-md">
+      <form className="mx-auto max-w-md" onSubmit={handleSubmit}>
         <div className="relative w-full">
           <input
             type="search"
             id="search"
             className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 "
             placeholder="Search for a city..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             required
           />
           <button
