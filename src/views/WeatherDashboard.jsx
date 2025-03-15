@@ -1,9 +1,9 @@
+import { useState } from 'react'
+import axios from 'axios'
 import SearchBar from '../components/SearchBar'
 import WeatherCard from '../components/WeatherCard'
 import ForecastSection from '../components/ForecastSection'
-import { useState } from 'react'
-import { useEffect } from 'react'
-import axios from 'axios'
+import Modal from '../components/Modal'
 // Tailwind 預設斷點
 // sm: 640px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1536px
 
@@ -57,6 +57,9 @@ function WeatherDashboard() {
         <WeatherCard />
         <ForecastSection />
       </main>
+      {errorMessage && (
+        <Modal message={errorMessage} onClose={() => setErrorMessage('')} />
+      )}
     </div>
   )
 }
