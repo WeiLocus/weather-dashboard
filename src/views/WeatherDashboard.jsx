@@ -12,16 +12,11 @@ function WeatherDashboard() {
   // const [weatherDate, setWeatherData] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
 
-  useEffect(() => {
-    console.log('useEffect')
-    if (!city) return
-    fetchWeatherDate(city)
-  }, [city])
-
   const handleSearch = async (searchCity) => {
     console.log('current search:', searchCity)
     setErrorMessage('')
     setCity(searchCity)
+    fetchWeatherDate(searchCity)
   }
 
   // 透過城市名稱請求經緯度
@@ -37,7 +32,7 @@ function WeatherDashboard() {
       console.log('response:', response)
       console.log('results:', response.data.results)
 
-      if (response.status === 200 && !response.data.results) {
+      if (response.status === 200 && !response.data.results.length) {
         setErrorMessage('City not found, Please try again.')
         return
       }
