@@ -5,8 +5,7 @@ import WeatherCard from '../components/WeatherCard'
 import ForecastSection from '../components/ForecastSection'
 import Modal from '../components/Modal'
 import { weatherCodeMap } from '../constants/weatherCodeMap'
-// Tailwind 預設斷點
-// sm: 640px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1536px
+import { formatDate } from '../utils/formateDate'
 
 function WeatherDashboard() {
   const [city, setCity] = useState('Taipei')
@@ -21,7 +20,7 @@ function WeatherDashboard() {
   }, [city, updateTrigger])
 
   // 取得當天日期
-  const currentDate = new Date().toISOString().split('T')[0]
+  const currentDate = formatDate.getCurrentDate()
 
   const handleSearch = async (searchCity) => {
     setErrorMessage('')
@@ -87,14 +86,11 @@ function WeatherDashboard() {
   const extractCurrentWeather = (hourlyData, hourlyUnits) => {
     const now = new Date()
     const currentHour = now.getHours()
-    const currentMinute = now.getMinutes()
-    const currentTime = `${currentHour}:${
-      currentMinute < 10 ? `0${currentMinute}` : currentMinute
-    }`
+
+    // 用來顯示當前時間 hh:mm
+    const currentTime = formatDate.getCurrentTime()
 
     let index = 0
-    // 取得日期
-    // const currentDate = now.toISOString().split('T')[0]
 
     for (let i = 0; i < hourlyData.time.length; i++) {
       const time = new Date(hourlyData.time[i])
@@ -132,12 +128,6 @@ function WeatherDashboard() {
     return weatherDate
   }
 
-  // 將天氣轉換成weekday
-  const getWeekday = (date) => {
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    return daysOfWeek[new Date(date).getDay()]
-  }
-
   // 整理日期與時間用來比對hourlyData, 取出預報資料
   const extractForecast = (hourlyData, hourlyUnits) => {
     const forecast = []
@@ -161,13 +151,12 @@ function WeatherDashboard() {
         seenHours[date] = true
         uniqueDays.add(date)
         dayCounter++
-
-        const month = new Date(date).getMonth() + 1
-        const day = new Date(date).getDate()
+        // 組合 mm/dd
+        const monthAndDay = formatDate.getMonthAndDay(date)
 
         forecast.push({
-          date: `${month}/${day}`,
-          weekday: getWeekday(date),
+          date: monthAndDay,
+          weekday: formatDate.getWeekday(date),
           temperature: hourlyData.temperature_2m[i],
           humidity:
             hourlyData.relative_humidity_2m[i] +
