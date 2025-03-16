@@ -1,3 +1,4 @@
+// import ForecastCard from "./ForecastCard"
 function ForecastSection({ forecastData }) {
   console.log('props forecastData:', forecastData)
 
@@ -10,6 +11,7 @@ function ForecastSection({ forecastData }) {
       <div className="relative flex flex-col justify-center mt-4 gap-3 md:flex-row md:flex-wrap md:gap-6">
         {forecastData &&
           forecastData.map((forecast, index) => (
+            // <ForecastCard forecast={forecast}/>
             <div
               key={index}
               className="flex justify-between items-center gap-2 w-full min-h-16 bg-white p-3 rounded-xl shadow-lg md:w-1/6 md:flex-col md:min-h-40"
@@ -25,6 +27,11 @@ function ForecastSection({ forecastData }) {
               {/* <div className="basis-1/6 flex justify-center items-center">
                 <TiWeatherCloudy className="h-6 w-6" />
               </div> */}
+              {forecast.weatherIcon && (
+                <div className="basis-1/6 flex justify-center items-center">
+                  <forecast.weatherIcon className="h-6 w-6" />
+                </div>
+              )}
               <p className="basis-2/5 text-sm text-gray-500">
                 {forecast.weatherDescription}
               </p>

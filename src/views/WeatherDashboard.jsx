@@ -121,6 +121,7 @@ function WeatherDashboard() {
         hourlyUnits.relative_humidity_2m,
       weatherCode: hourlyData.weather_code[index],
       weatherDescription: weatherDescription,
+      weatherIcon: weatherCodeMap[hourlyData.weather_code[index]].icon,
       windSpeed: hourlyData.wind_speed_10m[index] + hourlyUnits.wind_speed_10m,
       time: currentTime,
     }
@@ -162,6 +163,7 @@ function WeatherDashboard() {
             hourlyData.relative_humidity_2m[i] +
             hourlyUnits.relative_humidity_2m,
           weatherCode: hourlyData.weather_code[i],
+          weatherIcon: weatherCodeMap[hourlyData.weather_code[i]].icon,
           weatherDescription:
             weatherCodeMap[hourlyData.weather_code[i]].description,
           windSpeed: hourlyData.wind_speed_10m[i] + hourlyUnits.wind_speed_10m,
@@ -179,7 +181,7 @@ function WeatherDashboard() {
         Weather Dashboard
       </header>
       <SearchBar onSearch={handleSearch} />
-      <main className="md: m-4 p-3 max-w-5xl mx-auto bg-gray-200">
+      <main className="md: m-4 p-3 max-w-5xl mx-auto">
         <WeatherCard weatherData={weatherData} />
         <ForecastSection forecastData={forecastData} />
       </main>

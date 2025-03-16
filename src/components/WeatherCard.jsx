@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FaHeart } from 'react-icons/fa'
+import { FaHeart, FaRegClock } from 'react-icons/fa'
 
 function WeatherCard({ weatherData }) {
   const [isFavorite, setIsFavorite] = useState(false)
@@ -13,7 +13,7 @@ function WeatherCard({ weatherData }) {
   const temperatureF = (temperatureC * 9) / 5 + 32
 
   return (
-    <div className="relative max-w-80 min-w-60 py-3 px-4 border-1 rounded-xl border-slate-400-500 shadow-lg m-auto bg-white">
+    <div className="relative max-w-96 min-w-60 py-3 px-4 border-1 rounded-xl border-slate-400-500 shadow-lg m-auto bg-white">
       <div className="flex justify-between">
         {/* handle toggle favorite */}
         <button
@@ -32,8 +32,14 @@ function WeatherCard({ weatherData }) {
 
       <div className="flex flex-col md:flex-row md:justify-between">
         <div className="order-1 md:order-none text-start">
-          <p className="my-2">{weatherData.time}</p>
-          <p className="text-sm text-gray-700">
+          <p className="flex items-center gap-2 my-2 ">
+            <FaRegClock />
+            {weatherData.time}
+          </p>
+          <p className="flex justify-around items-center text-sm text-gray-500 md:gap-3">
+            {weatherData.weatherIcon && (
+              <weatherData.weatherIcon className="h-6 w-6" />
+            )}
             {weatherData.weatherDescription}
           </p>
         </div>
@@ -62,15 +68,17 @@ function WeatherCard({ weatherData }) {
         </div>
       </div>
 
-      <hr className="my-2 border-gray-300" />
-
-      <div className="flex items-center text-sm text-start gap-2">
-        <p className="sm:basis-3/5  md:basis-1/2">
-          Wind Speed {weatherData.windSpeed}
-        </p>
-        <p className="sm:basis-2/5  md:basis-1/2">
-          Humidity {weatherData.humidity}
-        </p>
+      <div className="mt-4 pt-4 border-t border-gray-200">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-blue-50 p-2 rounded-lg">
+            <p className="text-sm text-gray-500">Wind Speed</p>
+            <p className="text-sm font-medium">{weatherData.windSpeed}</p>
+          </div>
+          <div className="bg-blue-50 p-2 rounded-lg">
+            <p className="text-sm text-gray-500">Humidity</p>
+            <p className="text-sm font-medium">{weatherData.humidity}</p>
+          </div>
+        </div>
       </div>
     </div>
   )
