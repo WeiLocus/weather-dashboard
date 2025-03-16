@@ -13,17 +13,19 @@ function WeatherDashboard() {
   const [weatherData, setWeatherData] = useState({})
   const [errorMessage, setErrorMessage] = useState('')
   const [updateTrigger, setUpdateTrigger] = useState(0) // 確保city能響應式變化
+  const [forecastData, setForecastData] = useState(null)
 
   // 第一次進來先以台北當作預設
   useEffect(() => {
     fetchWeatherDate(city)
   }, [city, updateTrigger])
 
+  // 取得當天日期
+  const currentDate = new Date().toISOString().split('T')[0]
+
   const handleSearch = async (searchCity) => {
-    console.log('current search:', searchCity)
     setErrorMessage('')
     setCity(searchCity)
-    // fetchWeatherDate(searchCity)
     if (searchCity === city) {
       setUpdateTrigger((prev) => prev + 1)
     }
@@ -31,8 +33,6 @@ function WeatherDashboard() {
 
   // 透過城市名稱請求經緯度
   const fetchWeatherDate = async (cityName) => {
-    console.log('fetch data', cityName)
-
     try {
       const response = await axios.get(
         // name: 城市名稱, count: 回傳的匹配數量
@@ -76,11 +76,15 @@ function WeatherDashboard() {
       data.hourly_units
     )
     console.log('currentWeatherData:', currentWeatherData)
+    setWeatherData(currentWeatherData)
+    // 提取天氣預報資料
+    const forecastData = extractForecast(data.hourly, data.hourly_units)
+    console.log('forecastData:', forecastData)
+    setForecastData(forecastData)
   }
-  // 整理日期與時間用來比對hourlyData
+
+  // 整理日期與時間用來比對hourlyData, 拿到目前天氣資訊
   const extractCurrentWeather = (hourlyData, hourlyUnits) => {
-    console.log('city:', city)
-    console.log('hourlyData:', hourlyData)
     const now = new Date()
     const currentHour = now.getHours()
     const currentMinute = now.getMinutes()
@@ -90,7 +94,7 @@ function WeatherDashboard() {
 
     let index = 0
     // 取得日期
-    const currentDate = now.toISOString().split('T')[0]
+    // const currentDate = now.toISOString().split('T')[0]
 
     for (let i = 0; i < hourlyData.time.length; i++) {
       const time = new Date(hourlyData.time[i])
@@ -102,20 +106,17 @@ function WeatherDashboard() {
         break
       }
     }
-    console.log('index:', index)
 
     // 轉換天氣代碼成天氣描述
     let weatherDescription = ''
     if (index !== undefined) {
       Object.keys(weatherCodeMap).forEach((key) => {
         if (String(hourlyData.weather_code[index]) === key) {
-          console.log('key:', key)
           weatherDescription = weatherCodeMap[key].description
-          console.log('weatherDescription:', weatherDescription)
         }
       })
     }
-    console.log('9999city:', city)
+
     const weatherDate = {
       city: city,
       temperature: hourlyData.temperature_2m[index],
@@ -128,10 +129,59 @@ function WeatherDashboard() {
       time: currentTime,
     }
 
-    setWeatherData(weatherDate)
-    console.log('weatherDate:', weatherDate)
-
     return weatherDate
+  }
+
+  // 將天氣轉換成weekday
+  const getWeekday = (date) => {
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    return daysOfWeek[new Date(date).getDay()]
+  }
+
+  // 整理日期與時間用來比對hourlyData, 取出預報資料
+  const extractForecast = (hourlyData, hourlyUnits) => {
+    const forecast = []
+    // 紀錄已經加入資料的日期, 確保不重複
+    const uniqueDays = new Set()
+
+    let dayCounter = 0
+    // 儲存已經放過日期的值
+    const seenHours = {}
+    // 因為有時區問題, 會需要+8, 改直接用字串來比對日期與時間
+    for (let i = 0; i < hourlyData.time.length; i++) {
+      const timeStr = hourlyData.time[i]
+      // 切分日期、時間
+      const [date, time] = timeStr.split('T')
+      const hour = time.split(':')[0]
+
+      // 跳過今天
+      if (date === currentDate || uniqueDays.has(date)) continue
+
+      if (hour === '12' && !seenHours[date]) {
+        seenHours[date] = true
+        uniqueDays.add(date)
+        dayCounter++
+
+        const month = new Date(date).getMonth() + 1
+        const day = new Date(date).getDate()
+
+        forecast.push({
+          date: `${month}/${day}`,
+          weekday: getWeekday(date),
+          temperature: hourlyData.temperature_2m[i],
+          humidity:
+            hourlyData.relative_humidity_2m[i] +
+            hourlyUnits.relative_humidity_2m,
+          weatherCode: hourlyData.weather_code[i],
+          weatherDescription:
+            weatherCodeMap[hourlyData.weather_code[i]].description,
+          windSpeed: hourlyData.wind_speed_10m[i] + hourlyUnits.wind_speed_10m,
+        })
+      }
+      // 只儲存五天的數據
+      if (dayCounter >= 5) break
+    }
+    return forecast
   }
 
   return (
@@ -142,7 +192,7 @@ function WeatherDashboard() {
       <SearchBar onSearch={handleSearch} />
       <main className="md: m-4 p-3 max-w-5xl mx-auto bg-gray-200">
         <WeatherCard weatherData={weatherData} />
-        <ForecastSection />
+        <ForecastSection forecastData={forecastData} />
       </main>
       {errorMessage && (
         <Modal message={errorMessage} onClose={() => setErrorMessage('')} />
