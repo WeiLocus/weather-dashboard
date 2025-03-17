@@ -1,9 +1,15 @@
 // import ForecastCard from "./ForecastCard"
-function ForecastSection({ forecastData }) {
+function ForecastSection({ forecastData, isCelsius }) {
   console.log('props forecastData:', forecastData)
 
   if (!forecastData) {
     return null
+  }
+
+  // 把溫度轉換成華視
+  const tranTemperature = (temp) => {
+    const fahrenheit = (temp * 9) / 5 + 32
+    return fahrenheit.toFixed(1)
   }
 
   return (
@@ -25,11 +31,10 @@ function ForecastSection({ forecastData }) {
                 <p className="w-10 text-gray-600">{forecast.date}</p>
               </div>
               <p className="basis-1/6 font-semibold text-gray-800">
-                {forecast.temperature}°C
+                {isCelsius
+                  ? `${forecast.temperature}°C`
+                  : `${tranTemperature(forecast.temperature)}°F`}
               </p>
-              {/* <div className="basis-1/6 flex justify-center items-center">
-                <TiWeatherCloudy className="h-6 w-6" />
-              </div> */}
               {forecast.weatherIcon && (
                 <div className="basis-1/6 flex justify-center items-center">
                   <forecast.weatherIcon className="h-6 w-6" />

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { FaHeart, FaRegClock } from 'react-icons/fa'
 
-function WeatherCard({ weatherData }) {
+function WeatherCard({ weatherData, isCelsius, handleSwitchTemp }) {
   const [isFavorite, setIsFavorite] = useState(false)
-  const [isCelsius, setIsCelsius] = useState(true)
+  // const [isCelsius, setIsCelsius] = useState(true)
 
   if (Object.keys(weatherData).length === 0) {
     return null
@@ -32,11 +32,11 @@ function WeatherCard({ weatherData }) {
 
       <div className="flex flex-col md:flex-row md:justify-between">
         <div className="order-1 md:order-none text-start">
-          <p className="flex items-center gap-2 my-2 ">
+          <p className="flex items-center gap-3 my-2">
             <FaRegClock />
             {weatherData.time}
           </p>
-          <p className="flex justify-around items-center text-sm text-gray-500 md:gap-3">
+          <p className="flex justify-around items-center text-sm text-gray-500 gap-2 md:gap-3">
             {weatherData.weatherIcon && (
               <weatherData.weatherIcon className="h-6 w-6" />
             )}
@@ -45,15 +45,15 @@ function WeatherCard({ weatherData }) {
         </div>
 
         {/* 溫度 + 切換按鈕 */}
-        <div className="flex md:flex-col md:gap-2 items-center gap-5 my-2 order-2 md:order-none text-start">
-          <p className="text-lg font-medium md:text-2xl">
+        <div className="flex md:flex-col md:gap-2 items-center gap-5 my-2 order-2 md:order-none text-start ">
+          <p className="w-20 text-lg font-medium md:text-2xl">
             {isCelsius ? `${temperatureC}°C` : `${temperatureF.toFixed(1)}°F`}
           </p>
 
           {/* Toggle 開關 */}
           <button
-            onClick={() => setIsCelsius(!isCelsius)}
-            className="relative w-[60px] h-5 bg-gray-300 rounded-full flex items-center px-1 transition"
+            onClick={handleSwitchTemp}
+            className="relative w-[60px] h-5 bg-gray-300 rounded-full flex items-center px-1 transition md:hidden"
           >
             <span className="text-xs text-gray-700 w-6 text-center">
               {isCelsius ? '°F' : '°C'}

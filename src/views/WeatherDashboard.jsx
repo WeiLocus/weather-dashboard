@@ -7,6 +7,7 @@ import Modal from '../components/Modal'
 import { weatherCodeMap } from '../constants/weatherCodeMap'
 import { formatDate } from '../utils/formateDate'
 import LoadingSpinner from '../components/LoadingSpinner'
+import TemperatureToggle from '../components/TemperatureToggle'
 
 function WeatherDashboard() {
   const [city, setCity] = useState('Taipei')
@@ -15,6 +16,7 @@ function WeatherDashboard() {
   const [updateTrigger, setUpdateTrigger] = useState(0) // 確保city能響應式變化
   const [forecastData, setForecastData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isCelsius, setIsCelsius] = useState(true)
 
   // 第一次進來先以台北當作預設
   useEffect(() => {
@@ -180,19 +182,39 @@ function WeatherDashboard() {
     return forecast
   }
 
+  // 控制溫度切換
+  const handleSwitchTemp = () => {
+    setIsCelsius(!isCelsius)
+  }
+
   return (
     <div>
       <header className="text-2xl m-auto py-3 bg-blue-400 text-slate-50 font-bold">
         Weather Dashboard
       </header>
       <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-      <main className="md: m-4 p-3 max-w-5xl mx-auto">
+      <main className="relative md: m-4 p-3 max-w-5xl mx-auto">
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <>
-            <WeatherCard weatherData={weatherData} />
-            <ForecastSection forecastData={forecastData} />
+            <div className="absolute top-0 right-0 m-4">
+              <TemperatureToggle
+                isCelsius={isCelsius}
+                handleSwitchTemp={handleSwitchTemp}
+              />
+            </div>
+            <div>
+              <WeatherCard
+                weatherData={weatherData}
+                isCelsius={isCelsius}
+                handleSwitchTemp={handleSwitchTemp}
+              />
+            </div>
+            <ForecastSection
+              forecastData={forecastData}
+              isCelsius={isCelsius}
+            />
           </>
         )}
         {/* <WeatherCard weatherData={weatherData} />
