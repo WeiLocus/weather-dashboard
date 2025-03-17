@@ -185,7 +185,7 @@ function WeatherDashboard() {
       <header className="text-2xl m-auto py-3 bg-blue-400 text-slate-50 font-bold">
         Weather Dashboard
       </header>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSearch={handleSearch} isLoading={isLoading} />
       <main className="md: m-4 p-3 max-w-5xl mx-auto">
         {isLoading ? (
           <LoadingSpinner />
