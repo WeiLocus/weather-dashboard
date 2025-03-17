@@ -2,6 +2,10 @@
 function ForecastSection({ forecastData }) {
   console.log('props forecastData:', forecastData)
 
+  if (!forecastData) {
+    return null
+  }
+
   return (
     <div className="mt-4 md:mt-12">
       <div className="text-lg font-bold md: text-center md:text-xl">

@@ -5,8 +5,8 @@ function WeatherCard({ weatherData }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isCelsius, setIsCelsius] = useState(true)
 
-  if (!weatherData) {
-    return <p className="text-center">Loading weather data...</p>
+  if (Object.keys(weatherData).length === 0) {
+    return null
   }
 
   const temperatureC = weatherData.temperature
