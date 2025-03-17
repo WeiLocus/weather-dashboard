@@ -6,6 +6,7 @@ import ForecastSection from '../components/ForecastSection'
 import Modal from '../components/Modal'
 import { weatherCodeMap } from '../constants/weatherCodeMap'
 import { formatDate } from '../utils/formateDate'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 function WeatherDashboard() {
   const [city, setCity] = useState('Taipei')
@@ -13,6 +14,7 @@ function WeatherDashboard() {
   const [errorMessage, setErrorMessage] = useState('')
   const [updateTrigger, setUpdateTrigger] = useState(0) // 確保city能響應式變化
   const [forecastData, setForecastData] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   // 第一次進來先以台北當作預設
   useEffect(() => {
@@ -33,6 +35,7 @@ function WeatherDashboard() {
   // 透過城市名稱請求經緯度
   const fetchWeatherDate = async (cityName) => {
     try {
+      setIsLoading(true)
       const response = await axios.get(
         // name: 城市名稱, count: 回傳的匹配數量
         `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`
@@ -63,6 +66,8 @@ function WeatherDashboard() {
     } catch (error) {
       console.error('fetch error:', error.message)
       setErrorMessage('Failed to fetch data.')
+    } finally {
+      setIsLoading(false)
     }
   }
   // 處理API拿到的數據
@@ -182,8 +187,16 @@ function WeatherDashboard() {
       </header>
       <SearchBar onSearch={handleSearch} />
       <main className="md: m-4 p-3 max-w-5xl mx-auto">
-        <WeatherCard weatherData={weatherData} />
-        <ForecastSection forecastData={forecastData} />
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <WeatherCard weatherData={weatherData} />
+            <ForecastSection forecastData={forecastData} />
+          </>
+        )}
+        {/* <WeatherCard weatherData={weatherData} />
+        <ForecastSection forecastData={forecastData} /> */}
       </main>
       {errorMessage && (
         <Modal message={errorMessage} onClose={() => setErrorMessage('')} />
