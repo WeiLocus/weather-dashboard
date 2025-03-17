@@ -7,7 +7,7 @@ function TemperatureToggle({ isCelsius, handleSwitchTemp }) {
         onClick={handleSwitchTemp}
         className="relative w-[60px] h-6 bg-gray-300 rounded-full flex items-center px-1 transition"
       >
-        <span className="w-7 text-xs text-gray-700 w-6 text-center">
+        <span className="text-xs text-gray-700 w-6 text-center">
           {isCelsius ? '°F' : '°C'}
         </span>
         {/* toggle移動 */}

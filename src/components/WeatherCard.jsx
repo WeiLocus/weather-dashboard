@@ -17,7 +17,7 @@ function WeatherCard({
   const temperatureF = (temperatureC * 9) / 5 + 32
 
   return (
-    <div className="relative max-w-96 min-w-60 py-3 px-4 border-1 rounded-xl border-slate-400-500 shadow-lg bg-white">
+    <div className="relative max-w-96 min-w-80 py-3 px-4 border-1 rounded-xl border-slate-400-500 shadow-lg bg-white">
       <div className="flex justify-between">
         {/* handle toggle favorite */}
         <button
