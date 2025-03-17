@@ -8,6 +8,7 @@ import { weatherCodeMap } from '../constants/weatherCodeMap'
 import { formatDate } from '../utils/formateDate'
 import LoadingSpinner from '../components/LoadingSpinner'
 import TemperatureToggle from '../components/TemperatureToggle'
+import FavoriteCity from '../components/FavoriteCity'
 
 function WeatherDashboard() {
   const [city, setCity] = useState('Taipei')
@@ -17,15 +18,24 @@ function WeatherDashboard() {
   const [forecastData, setForecastData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isCelsius, setIsCelsius] = useState(true)
+  const [favCities, setFavCities] = useState([])
 
   // 第一次進來先以台北當作預設
   useEffect(() => {
     fetchWeatherDate(city)
   }, [city, updateTrigger])
 
+  // 判斷localStorage有沒有喜愛城市的資料
+  useEffect(() => {
+    const currentFavoriteCities =
+      JSON.parse(localStorage.getItem('favoriteCity')) || []
+    setFavCities(currentFavoriteCities)
+  }, [])
+
   // 取得當天日期
   const currentDate = formatDate.getCurrentDate()
 
+  // 觸發搜尋天氣
   const handleSearch = async (searchCity) => {
     setErrorMessage('')
     setCity(searchCity)
@@ -187,28 +197,51 @@ function WeatherDashboard() {
     setIsCelsius(!isCelsius)
   }
 
+  // 處理喜愛城市的新增/移除
+  const handleToggleFavorite = (cityName) => {
+    // 避免污染
+    let updatedFavorite = [...favCities]
+
+    if (updatedFavorite.includes(cityName)) {
+      updatedFavorite = updatedFavorite.filter((city) => city !== cityName)
+    } else {
+      updatedFavorite.push(cityName)
+    }
+
+    // 更新localStorage資料
+    localStorage.setItem('favoriteCity', JSON.stringify(updatedFavorite))
+    setFavCities(updatedFavorite)
+  }
+
   return (
     <div>
       <header className="text-2xl m-auto py-3 bg-blue-400 text-slate-50 font-bold">
         Weather Dashboard
       </header>
       <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-      <main className="relative md: m-4 p-3 max-w-5xl mx-auto">
+
+      <main className="md: m-4 p-3 max-w-5xl mx-auto">
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <>
-            <div className="absolute top-0 right-0 m-4">
+            <div className="absolute top-12 right-8 m-4">
               <TemperatureToggle
                 isCelsius={isCelsius}
                 handleSwitchTemp={handleSwitchTemp}
               />
             </div>
-            <div>
+            <div className="flex flex-col items-center gap-2 md:flex-row md:justify-around md:items-start">
               <WeatherCard
                 weatherData={weatherData}
                 isCelsius={isCelsius}
                 handleSwitchTemp={handleSwitchTemp}
+                favoriteCities={favCities}
+                onToggleFavorite={handleToggleFavorite}
+              />
+              <FavoriteCity
+                favoriteCities={favCities}
+                onToggleFavorite={handleToggleFavorite}
               />
             </div>
             <ForecastSection

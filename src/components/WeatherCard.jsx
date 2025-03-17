@@ -1,29 +1,35 @@
-import { useState } from 'react'
 import { FaHeart, FaRegClock } from 'react-icons/fa'
 
-function WeatherCard({ weatherData, isCelsius, handleSwitchTemp }) {
-  const [isFavorite, setIsFavorite] = useState(false)
-  // const [isCelsius, setIsCelsius] = useState(true)
-
+function WeatherCard({
+  weatherData,
+  isCelsius,
+  handleSwitchTemp,
+  favoriteCities,
+  onToggleFavorite,
+}) {
   if (Object.keys(weatherData).length === 0) {
     return null
   }
+
+  const isFavorite = favoriteCities.includes(weatherData.city)
 
   const temperatureC = weatherData.temperature
   const temperatureF = (temperatureC * 9) / 5 + 32
 
   return (
-    <div className="relative max-w-96 min-w-60 py-3 px-4 border-1 rounded-xl border-slate-400-500 shadow-lg m-auto bg-white">
+    <div className="relative max-w-96 min-w-60 py-3 px-4 border-1 rounded-xl border-slate-400-500 shadow-lg bg-white">
       <div className="flex justify-between">
         {/* handle toggle favorite */}
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
-          className="absolute top-[18px] right-4 text-gray-400 hover:text-red-500 transition"
+          onClick={() => onToggleFavorite(weatherData.city)}
+          className="absolute top-[18px] right-4 text-gray-400 transition"
           title="add to favorite"
         >
           <FaHeart
             className={`w-4 h-4 ${
-              isFavorite ? 'text-red-500' : 'text-gray-400'
+              isFavorite
+                ? 'text-red-500 hover:text-gray-300'
+                : 'text-gray-400 hover:text-red-300'
             }`}
           />
         </button>
