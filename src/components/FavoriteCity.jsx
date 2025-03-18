@@ -89,11 +89,11 @@ function FavoriteCity({ favoriteCities, onToggleFavorite, isCelsius }) {
                 key={city}
                 className="flex items-center justify-around py-3 border-b last:border-none hover:bg-gray-50 cursor-pointer"
               >
-                <div className="flex items-center gap-6">
-                  <span className="font-medium">{city}</span>
+                <div className="flex justify-between items-center gap-4">
+                  <span className="w-20 text-start font-medium">{city}</span>
                   {cityWeatherData && !cityWeatherData.error ? (
                     <>
-                      <span>
+                      <span className="w-14">
                         {isCelsius
                           ? `${cityWeatherData.data.temperature}°C`
                           : `${formatTemperature(
