@@ -83,6 +83,7 @@ export const weatherService = {
 
         const weatherCode = hourlyData.weather_code[i]
         forecast.push({
+          id: date, // 不重複
           date: formatDate.getMonthAndDay(date),
           weekday: formatDate.getWeekday(date),
           temperature: hourlyData.temperature_2m[i],

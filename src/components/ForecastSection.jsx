@@ -20,9 +20,9 @@ function ForecastSection({ forecastData, isCelsius }) {
 
       <div className="relative flex flex-col justify-center mt-4 gap-3 md:flex-row md:flex-wrap md:gap-6">
         {forecastData &&
-          forecastData.map((forecast, index) => (
+          forecastData.map((forecast) => (
             <div
-              key={index}
+              key={forecast.id}
               className="flex justify-between items-center gap-2 w-full min-h-16 bg-white p-3 rounded-xl shadow-lg md:w-1/6 md:flex-col md:min-h-40"
             >
               <div className="flex basis-1/4 font-semibold">
