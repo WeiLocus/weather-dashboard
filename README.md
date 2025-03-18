@@ -3,10 +3,12 @@
 👀 Live demo: https://weilocus.github.io/weather-dashboard/
 
 Desktop UI
-<img src="/public/screen.png" width="500" height="auto" style="display:block"/>
+<br />
+<img src="/public/screen.png" width="500" height="auto"/>
 
 Mobile UI
-<img src="/public/screen-mobile.png" width="250" height="auto" style="display:block"/>
+<br />
+<img src="/public/screen-mobile.png" width="250" height="auto"/>
 
 ## Description
 
