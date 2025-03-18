@@ -91,6 +91,7 @@ export const weatherService = {
             hourlyData.relative_humidity_2m[i] +
             hourlyUnits.relative_humidity_2m,
           weatherCode,
+          weatherIcon: weatherCodeMap[hourlyData.weather_code[i]].icon,
           weatherDescription: weatherCodeMap[weatherCode]?.description || null,
           windSpeed: hourlyData.wind_speed_10m[i] + hourlyUnits.wind_speed_10m,
         })
