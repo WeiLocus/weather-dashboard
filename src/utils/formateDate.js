@@ -9,7 +9,9 @@ export const formatDate = {
     const now = new Date()
     const hours = now.getHours()
     const minutes = now.getMinutes()
-    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`
+    return `${hours < 10 ? `0${hours}` : hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    }`
   },
 
   // 將日期轉換為星期幾的縮寫
@@ -24,5 +26,22 @@ export const formatDate = {
     const month = date.getMonth() + 1
     const day = date.getDate()
     return `${month}/${day}`
+  },
+
+  // 查找當前小時的索引
+  findCurrentHourIndex: (hourlyTimes, currentDate) => {
+    const now = new Date()
+    const currentHour = now.getHours()
+
+    for (let i = 0; i < hourlyTimes.length; i++) {
+      const time = new Date(hourlyTimes[i])
+      if (
+        time.toISOString().split('T')[0] === currentDate &&
+        time.getHours() === currentHour
+      ) {
+        return i
+      }
+    }
+    return 0 // 預設返回第一個索引
   },
 }
