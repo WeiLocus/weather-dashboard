@@ -79,7 +79,7 @@ function WeatherDashboard() {
       setErrorMessage(
         error.message === 'City not found'
           ? 'City not found. Please try again.'
-          : 'Failed to fetch weather data.'
+          : `Failed to fetch ${cityName} weather data.`
       )
     } finally {
       setIsLoading(false)
@@ -112,7 +112,11 @@ function WeatherDashboard() {
       <header className="text-2xl m-auto py-3 bg-blue-400 text-slate-50 font-bold">
         Weather Dashboard
       </header>
-      <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+      <SearchBar
+        onSearch={handleSearch}
+        isLoading={isLoading}
+        weatherData={weatherData}
+      />
 
       <main className="md: m-4 p-3 max-w-5xl mx-auto">
         {isLoading ? (
@@ -125,7 +129,7 @@ function WeatherDashboard() {
                 handleSwitchTemp={handleSwitchTemp}
               />
             </div>
-            <div className="flex flex-col items-center gap-2 md:flex-row md:justify-around md:items-start">
+            <div className="flex flex-col items-center gap-6 md:flex-row md:justify-around md:items-start md:gap-2 ">
               <WeatherCard
                 weatherData={weatherData}
                 isCelsius={isCelsius}

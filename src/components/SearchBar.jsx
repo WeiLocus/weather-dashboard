@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-function SearchBar({ onSearch, isLoading }) {
+function SearchBar({ onSearch, isLoading, weatherData }) {
   const [searchInput, setSearchInput] = useState('')
+
+  useEffect(() => {
+    if (weatherData) {
+      setSearchInput('')
+    }
+  }, [weatherData])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -9,6 +15,7 @@ function SearchBar({ onSearch, isLoading }) {
     console.log('search:', searchInput)
     onSearch(searchInput)
   }
+
   return (
     <div className="m-2 sm: mt-4">
       <form className="mx-auto max-w-md" onSubmit={handleSubmit}>
