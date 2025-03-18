@@ -4,15 +4,17 @@ import { weatherCodeMap } from '../constants/weatherCodeMap'
 
 export const weatherService = {
   // 獲取城市的經緯度
+  /**
+   * 獲取城市的經緯度
+   * @param {string} cityName - 城市名稱
+   * @returns {Promise<Object>} - 包含緯度與經度的地理資訊
+   */
   getGeoLocation: async (cityName) => {
     try {
       const response = await axios.get(
         // name: 城市名稱, count: 回傳的匹配數量
         `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`
       )
-
-      console.log('response:', response)
-      console.log('results:', response.data.results)
 
       if (response.status === 200 && !response.data.results?.length) {
         throw new Error('City not found')
@@ -24,7 +26,13 @@ export const weatherService = {
     }
   },
 
-  // 獲取天氣資料
+  // 獲取天氣資料: 溫度、濕度、風速、天氣狀況
+  /**
+   * 獲取天氣資料
+   * @param {number} latitude - 緯度
+   * @param {number} longitude - 經度
+   * @returns {Promise<Object>} - 包含天氣數據的物件
+   */
   getWeatherData: async (latitude, longitude) => {
     try {
       const response = await axios.get(
@@ -38,7 +46,7 @@ export const weatherService = {
     }
   },
 
-  // 取得當前天氣資料
+  // 取得當前天氣資料: 需要先換算時間, 在取得當下天氣資訊
   extractCurrentWeather: (hourlyData, hourlyUnits, city) => {
     const currentDate = formatDate.getCurrentDate()
     const currentTime = formatDate.getCurrentTime()
@@ -61,7 +69,7 @@ export const weatherService = {
     }
   },
 
-  // 取得天氣預報資料
+  // 取得天氣預報資料: 不包含今天, 後面五天的12點預報資料
   extractForecast: (hourlyData, hourlyUnits) => {
     const forecast = []
     const uniqueDays = new Set() // 不重複存取
