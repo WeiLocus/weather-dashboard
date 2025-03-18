@@ -47,7 +47,6 @@ function WeatherDashboard() {
     try {
       // 獲取城市的經緯度
       const geoData = await weatherService.getGeoLocation(cityName)
-      console.log('geoData:', geoData)
 
       // 獲取天氣資料
       const weatherData = await weatherService.getWeatherData(
@@ -123,7 +122,7 @@ function WeatherDashboard() {
           <LoadingSpinner />
         ) : (
           <>
-            <div className="absolute top-12 right-8 m-4">
+            <div className="absolute top-12 right-44 m-4">
               <TemperatureToggle
                 isCelsius={isCelsius}
                 handleSwitchTemp={handleSwitchTemp}

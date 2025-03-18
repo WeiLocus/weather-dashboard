@@ -1,7 +1,5 @@
 // import ForecastCard from "./ForecastCard"
 function ForecastSection({ forecastData, isCelsius }) {
-  console.log('props forecastData:', forecastData)
-
   if (!forecastData) {
     return null
   }
